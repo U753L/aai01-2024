@@ -13,10 +13,6 @@ env = gym.make('highway-v0', render_mode='rgb_array')
 env.configure({
     "duration": 400,
     "lanes_count": 5,
-    #"action": {
-    #"type": "DiscreteMetaAction"
-    #          },
-    #"show_trajectories": True
 })
 
 env.reset()
@@ -41,7 +37,6 @@ while not done and not truncated:
     env.render()
     average_speed += info['speed']
     ticks_counted += 1
-    #print(info)
 end = time.time()
 print("____________________")
 print("FINISHED SIMULATION.")
@@ -53,5 +48,3 @@ print("Actions:", chosen_actions)
 print()
 print("Time taken", round(end-start, 2))
 print()
-#plt.imshow(env.render())
-#plt.show()
