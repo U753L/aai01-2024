@@ -1,6 +1,5 @@
 #AUTOMATIC/RANDOM
 import gymnasium as gym
-from matplotlib import pyplot as plt
 import warnings
 from random import choice
 import time
