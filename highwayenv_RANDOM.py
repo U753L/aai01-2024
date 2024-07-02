@@ -1,6 +1,5 @@
 #AUTOMATIC/RANDOM
 import gymnasium as gym
-from matplotlib import pyplot as plt
 import warnings
 from random import choice
 import time
@@ -13,10 +12,6 @@ env = gym.make('highway-v0', render_mode='rgb_array')
 env.configure({
     "duration": 400,
     "lanes_count": 5,
-    #"action": {
-    #"type": "DiscreteMetaAction"
-    #          },
-    #"show_trajectories": True
 })
 
 env.reset()
@@ -53,5 +48,3 @@ print("Actions:", chosen_actions)
 print()
 print("Time taken", round(end-start, 2))
 print()
-#plt.imshow(env.render())
-#plt.show()
