@@ -1,6 +1,5 @@
 #MANUAL
 import gymnasium as gym
-from matplotlib import pyplot as plt
 import warnings
 from random import choice
 import time
@@ -19,9 +18,6 @@ env.configure({
     "duration": 115,
     "lanes_count": 5,
     "manual_control": True,
-    #"action": {
-    #"type": "DiscreteMetaAction"
-    #          },
 })
 ## PYGAME THINGS
 pygame.init()
@@ -61,7 +57,6 @@ while not done and not truncated:
     env.render()
     average_speed += info['speed']
     ticks_counted += 1
-    #print(chosen_actions, action_taken)
 end = time.time()
 
 print("____________________")
