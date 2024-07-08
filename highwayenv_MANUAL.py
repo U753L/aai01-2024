@@ -22,7 +22,6 @@ env.configure({
 ## PYGAME THINGS
 pygame.init()
 screen = pygame.display.set_mode( (640,480) )
-pygame.display.set_caption('Python numbers')
 screen.fill((159, 182, 205))
 
 env.reset()
