@@ -1,20 +1,20 @@
 #HEURISTIC/RULE-BASED
-import gymnasium as gym
+import gymnasium as gym # highway-env environment contained in this
 import warnings
 from random import choice
 import time
 import numpy as np
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore") # otherwise i get a bunch of annoying warnings
 
 #fout = open('test.txt', 'w')
-env = gym.make('highway-v0', render_mode='rgb_array')
+env = gym.make('highway-v0', render_mode='rgb_array') # creating the highway env
 
-env.configure({
+env.configure({ # configuration
     "action": {
         "type": "DiscreteMetaAction",
     },
     "observation": {
-        "type": "OccupancyGrid",
+        "type": "OccupancyGrid", # observation type
         "vehicles_count": 15,
         "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features_range": {
@@ -31,17 +31,12 @@ env.configure({
     "vehicles_count": 50,
     "duration": 100,  # [s]
     "initial_spacing": 2,
-    "simulation_frequency": 15,  # [Hz] # CHANGE BACK TO 15
+    "simulation_frequency": 15,  # [Hz]
     "policy_frequency": 0.25,  # [Hz]
     "render_agent": True,
 })
 
-obs, other = env.reset()
-#for a in obs[0]:
-#    for b in a:
-#        fout.write(str(b) + ' ')
-#    fout.write('\n')
-#fout.close()
+obs, other = env.reset() # start environment
 start = time.time()
 
 done = False
@@ -59,7 +54,7 @@ chosen_actions = [0,0,0,0,0]
 speed=100
 
 
-def getAction(env, obs, speed):
+def getAction(env, obs, speed): # based on observations, decides on what action to perform.
     available = env.get_available_actions()
     car_left = any(obs[0][20][19:30]) or 0 not in available # cant go to left lane
     car_right = any(obs[0][24][19:30]) or 2 not in available # cant go to right lane
@@ -80,11 +75,11 @@ def getAction(env, obs, speed):
 total_reward = 0
 while not done and not truncated:
     
-    action = getAction(env, obs, speed)
-    chosen_actions[action]+=1
-    obs, reward, done, truncated, info = env.step(action)
+    action = getAction(env, obs, speed) # get the action
+    chosen_actions[action]+=1 # record it
+    obs, reward, done, truncated, info = env.step(action) # perform it
     total_reward += reward
-    speed = info['speed']
+    speed = info['speed'] # keep obs and speed for the next iteration
     env.render()
     if not done and not truncated:
         average_speed += info['speed']
