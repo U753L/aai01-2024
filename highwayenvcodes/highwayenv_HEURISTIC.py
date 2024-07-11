@@ -1,20 +1,20 @@
 #HEURISTIC/RULE-BASED
-import gymnasium as gym # highway-env environment contained in this
+import gymnasium as gym
 import warnings
 from random import choice
 import time
 import numpy as np
-warnings.filterwarnings("ignore") # otherwise i get a bunch of annoying warnings
+warnings.filterwarnings("ignore")
 
 #fout = open('test.txt', 'w')
-env = gym.make('highway-v0', render_mode='rgb_array') # creating the highway env
+env = gym.make('highway-v0', render_mode='rgb_array')
 
-env.configure({ # configuration
+env.configure({
     "action": {
         "type": "DiscreteMetaAction",
     },
     "observation": {
-        "type": "OccupancyGrid", # observation type
+        "type": "OccupancyGrid",
         "vehicles_count": 15,
         "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
         "features_range": {
@@ -26,17 +26,23 @@ env.configure({ # configuration
         "grid_size": [[-45, 45], [-45, 45]],
         "grid_step": [2, 2],
         "absolute": False
-    }, ##### our result from this is a 15x15 grid in each of the attributes
+    }, ##### our result from this is a 45x45 grid in each of the attributes
     "lanes_count": 4,
     "vehicles_count": 50,
     "duration": 100,  # [s]
     "initial_spacing": 2,
-    "simulation_frequency": 15,  # [Hz]
+    "simulation_frequency": 15,  # [Hz] # CHANGE BACK TO 15
     "policy_frequency": 0.25,  # [Hz]
     "render_agent": True,
+    "manual_control": False
 })
 
-obs, other = env.reset() # start environment
+obs, other = env.reset()
+#for a in obs[0]:
+#    for b in a:
+#        fout.write(str(b) + ' ')
+#    fout.write('\n')
+#fout.close()
 start = time.time()
 
 done = False
@@ -54,10 +60,10 @@ chosen_actions = [0,0,0,0,0]
 speed=100
 
 
-def getAction(env, obs, speed): # based on observations, decides on what action to perform.
+def getAction(env, obs, speed):
     available = env.get_available_actions()
-    car_left = any(obs[0][20][19:30]) or 0 not in available # cant go to left lane
-    car_right = any(obs[0][24][19:30]) or 2 not in available # cant go to right lane
+    car_left = any(obs[0][20][19:35]) or 0 not in available # cant go to left lane
+    car_right = any(obs[0][24][19:35]) or 2 not in available # cant go to right lane
     car_ahead = any(obs[0][22][23:35])
     slow_car_ahead = car_ahead and any([obs[3][22][i]<i for i in range(23,35)])
     #print(car_left, car_ahead, car_right)
@@ -75,11 +81,11 @@ def getAction(env, obs, speed): # based on observations, decides on what action 
 total_reward = 0
 while not done and not truncated:
     
-    action = getAction(env, obs, speed) # get the action
-    chosen_actions[action]+=1 # record it
-    obs, reward, done, truncated, info = env.step(action) # perform it
+    action = getAction(env, obs, speed)
+    chosen_actions[action]+=1
+    obs, reward, done, truncated, info = env.step(action)
     total_reward += reward
-    speed = info['speed'] # keep obs and speed for the next iteration
+    speed = info['speed']
     env.render()
     if not done and not truncated:
         average_speed += info['speed']
@@ -92,9 +98,10 @@ end = time.time()
 
 
 # print lines
-
-print("____________________")
-print("FINISHED SIMULATION.")
+print("______________________")
+print("|                    |")
+print("|FINISHED SIMULATION.|")
+print("|____________________|")
 print()
 print()
 print("Average speed:", round(average_speed / ticks_counted, 2))
