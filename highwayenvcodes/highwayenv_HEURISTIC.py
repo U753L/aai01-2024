@@ -65,7 +65,7 @@ def getAction(env, obs, speed):
     car_left = any(obs[0][20][19:35]) or 0 not in available # cant go to left lane
     car_right = any(obs[0][24][19:35]) or 2 not in available # cant go to right lane
     car_ahead = any(obs[0][22][23:35])
-    slow_car_ahead = car_ahead and any([obs[3][22][i]<i for i in range(23,35)])
+    slow_car_ahead = car_ahead and any([obs[3][22][i]<0.5 for i in range(23,35)])
     #print(car_left, car_ahead, car_right)
     if not slow_car_ahead:
         if speed <= 21:
